@@ -74,29 +74,83 @@ Workflow:
       {
         "contentType": "application/vnd.microsoft.card.adaptive",
         "content": {
-          "type": "AdaptiveCard",
-          "version": "1.0",
-          "body": [
-            {
-              "type": "TextBlock",
-              "text": "Hello World!",
-              "size": "large"
-            }
-          ],
-          "actions": [
-            {
-              "type": "Action.Execute",
-              "verb": "doStuff",
-              "title": "DoStuff"
-            }
-          ]
-        }
+            "type": "AdaptiveCard",
+            "body": [
+              {
+                "type": "TextBlock",
+                "size": "Medium",
+                "weight": "Bolder",
+                "text": "Your Hello World Bot is Running"
+              },
+              {
+                "type": "TextBlock",
+                "text": "Congratulations!",
+                "wrap": true
+              }
+            ],
+            "actions": [
+              {
+                "type": "Action.OpenUrl",
+                "title": "Bot Framework Docs",
+                "url": "https://docs.microsoft.com/en-us/azure/bot-service"
+              },
+              {
+                "type": "Action.OpenUrl",
+                "title": "Teams Toolkit Docs",
+                "url": "https://aka.ms/teamsfx-docs"
+              },
+              {
+                "type": "Action.Submit",
+                "title": "ActionWithSubmit",
+                "data": {
+                  "msteams": {
+                      "type": "messageBack",
+                      "text": "text to bots",
+                      "value": "{\"a\": \"dddd\"}"
+                  }
+                }
+              },
+              {
+                "type": "Action.Execute",
+                "title": "ActionWithExecute",
+                "verb": "doStuff",
+                "data": "ddd",
+              }
+            ],
+            "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+            "version": "1.4"
+          }
       }
     ]
   }
   ```
+- If user click ActionWithSubmit button, it will send message activity to Bot backend with data defined in the adaptive card
 
-- User click DoStuff button, it will send activity with name `adaptiveCard/action`
+
+  Activity payload: 
+  ```json
+  {
+    "text":"text to bots",
+    "type":"message",
+    "value":{
+        "a":"dddd"
+    },
+    ...
+  }
+  ```
+
+  You can response it with plain message or another adaptive card:
+  ```json
+  {
+    "type": "message",
+    "text": "response message",
+  }
+  ```
+
+  ![Bot Response Message](./bot-response-message.png)
+
+
+- If user click ActionWithExecute button, it will send activity with name `adaptiveCard/action`
 
   ```ts
   if (context.activity.name === "adaptiveCard/action") { 
@@ -157,6 +211,24 @@ Workflow:
     // send tab response with adaptive card
   }
   ```
+
+  The payload inside activity will be as below:
+  ```json
+  {
+   "name":"tab/submit",
+   "type":"invoke",
+   "value":{
+      "data":{
+         "a":"dddd"
+      },
+      "tabContext":{
+         "tabEntityId":"homeTab"
+      }
+   },
+  }
+  ```
+
+
 
   A sample Tab response will be as below:
   ![Adaptive Card Tab](./adaptive-card-tab.png)
