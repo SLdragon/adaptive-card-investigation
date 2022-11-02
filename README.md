@@ -212,24 +212,6 @@ Workflow:
   }
   ```
 
-  The payload inside activity will be as below:
-  ```json
-  {
-   "name":"tab/submit",
-   "type":"invoke",
-   "value":{
-      "data":{
-         "a":"dddd"
-      },
-      "tabContext":{
-         "tabEntityId":"homeTab"
-      }
-   },
-  }
-  ```
-
-
-
   A sample Tab response will be as below:
   ![Adaptive Card Tab](./adaptive-card-tab.png)
   ```json
@@ -295,6 +277,22 @@ Workflow:
   }
   ```
 
+  The payload inside activity will be as below:
+  ```json
+  {
+   "name":"tab/submit",
+   "type":"invoke",
+   "value":{
+      "data":{
+         "a":"dddd"
+      },
+      "tabContext":{
+         "tabEntityId":"homeTab"
+      }
+   },
+  }
+  ```
+
   A sample Tab response will be as below:
   ![Invoke with Submit](./invoke-with-submit.png)
   ```json
@@ -334,6 +332,147 @@ Workflow:
 - Currently, Teams Tab not supported `Action.Execute`, it will show error as below:
 
   ![Not Support Card Action](./not-support-card-action.png)
+
+## Adaptive Card in Message extension
+Workflow:
+- Message extension can define a custom adaptive card to collect the user input. For this approach, set the fetchTask parameter to true in the manifest. If you set, fetchTask to true any static parameters defined for the command will be ignored. It will send `composeExtension/fetchTask` to backend Bot to request a custom adaptive card.
+
+  ```json
+    "composeExtensions": [
+      {
+        "botId": "{{state.fx-resource-bot.botId}}",
+        "commands": [
+          {
+              "id": "createCard",
+              "context": [
+                  "compose"
+              ],
+              "description": "Command to run action to create a Card from Compose Box",
+              "title": "Create Card",
+              "type": "action",
+              "fetchTask": true
+          }
+          ...
+        ]
+        ...
+      },
+    ]
+  ```
+
+- Bot backend response body will be as below (for message extension, Action.Execute is not work, if the response body contains Action.Execute action, then it will render nothing):
+
+  ```json
+  {
+    "task": {
+        "type": "continue",
+        "value": {
+            "card": {
+                "contentType": "application/vnd.microsoft.card.adaptive",
+                "content":{
+                  "type": "AdaptiveCard",
+                  "body": [
+                    {
+                      "type": "TextBlock",
+                      "size": "Medium",
+                      "weight": "Bolder",
+                      "text": "Your Hello World Bot is Running"
+                    },
+                    {
+                      "type": "TextBlock",
+                      "text": "Congratulations!",
+                      "wrap": true
+                    }
+                  ],
+                  "actions": [
+                    {
+                      "type": "Action.OpenUrl",
+                      "title": "Bot Framework Docs",
+                      "url": "https://docs.microsoft.com/en-us/azure/bot-service"
+                    },
+                    {
+                      "type": "Action.OpenUrl",
+                      "title": "Teams Toolkit Docs",
+                      "url": "https://aka.ms/teamsfx-docs"
+                    },
+                    {
+                      "type": "Action.Submit",
+                      "title": "ActionWithSubmit",
+                      "data": {
+                        "msteams": {
+                            "type": "messageBack",
+                            "text": "text to bots",
+                            "value": "{\"a\": \"dddd\"}"
+                        }
+                      }
+                    }
+                  ],
+                  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+                  "version": "1.4"
+                }
+            }
+        }
+    }
+  }
+  ```
+  ![Message Extension](./message-extension.png)
+
+- When user click `ActionWithSubmit` button, it will send `composeExtension/submitAction` to the Bot backend with the request body as below:
+
+  ```json
+  {
+    "commandId":"createCard",
+    "commandContext":"compose",
+    "requestId":"962f6e8b-011b-4994-973b-b5cf3b2396ba",
+    "context":{
+        "theme":"default"
+    },
+    "data":{
+        "msteams":{
+          "type":"messageBack",
+          "text":"text to bots",
+          "value":"{\"a\": \"dddd\"}"
+        }
+    }
+  }
+  ```
+
+- And Bot endpoint will response as below:
+  ```json
+  {
+    "task": {
+      "type": "continue",
+      "value": {
+          "card": {
+              "contentType": "application/vnd.microsoft.card.adaptive",
+              "content":{
+                "type":"AdaptiveCard",
+                "body":[
+                    {
+                      "type":"TextBlock",
+                      "size":"Medium",
+                      "weight":"Bolder",
+                      "text":"Invoke with submit"
+                    }
+                ],
+                "actions":[
+                    {
+                      "type":"Action.OpenUrl",
+                      "title":"Bot Framework Docs",
+                      "url":"https://docs.microsoft.com/en-us/azure/bot-service/?view=azure-bot-service-4.0"
+                    }
+                ],
+                "$schema":"http://adaptivecards.io/schemas/adaptive-card.json",
+                "version":"1.4"
+              }
+          }
+      }
+    }
+  }
+  ```
+  ![Message Extension Response](./message-extension-response.png)
+
+
+
 
 ## Adaptive Card in pure HTML
 
@@ -392,7 +531,134 @@ Workflow:
   document.body.appendChild(adaptiveCard.render());
   ```
 
-![Pure Html Card](./pure-html-card.png)
+  ![Pure Html Card](./pure-html-card.png)
+
+
+## Compare adaptive card in different platform
+
+Trigger pattern and supported action:
+
+| Platform              | Open Trigger Pattern       | Action.Execute Trigger Pattern | Action.Submit trigger Pattern |
+| --------------------- | -------------------------- | ------------------------------ | ----------------------------- |
+| Chat Bot in Teams     | ×                          | adaptiveCard/action            | message                       |
+| Teams Tab             | tab/fetch                  | ×                              | tab/submit                    |
+| Message Extension     | composeExtension/fetchTask | ×                              | composeExtension/submitAction |
+| Pure Static Html Page | ×                          | onExecuteAction                | onExecuteAction               |
+
+
+Adaptive card response body in different platform:
+
+![](./compare-tab-for-adaptive-card.png)
+
+Body of adaptive card when user query first one:
+
+Bot:
+```json
+{
+  "type": "message",
+  "attachments": [
+    {
+    "contentType": "application/vnd.microsoft.card.adaptive",
+    "content":  // Card Body
+    }
+  ]
+}
+```
+
+Tab:
+
+```json
+{
+  "tab":{
+    "type":"continue",
+    "value":{
+        "cards":[
+          {
+              "card": // Card Body
+          }
+        ]
+    }
+  }
+}
+```
+
+Message Extension:
+```json
+{
+  "task": {
+      "type": "continue",
+      "value": {
+          "card": {
+              "contentType": "application/vnd.microsoft.card.adaptive",
+              "content": // Card Body
+          }
+      }
+  }
+}
+```
+
+Pure Html:
+```js
+adaptiveCard.parse(/*Card Body*/);
+```
+
+Body of adaptive card when user click action button:
+
+Bot:
+```json
+{
+  "type": "invokeResponse",
+  "value":  {
+    "status": 200,
+    "body": {
+      "statusCode": 200,
+      "type": "application/vnd.microsoft.card.adaptive",
+      "value": // Card Body
+    }
+  }
+}
+```
+
+
+Tab:
+```json
+{
+  "tab":{
+    "type":"continue",
+    "value":{
+        "cards":[
+          {
+              "card": // Card Body
+          }
+        ]
+    }
+  }
+}
+```
+
+Message Extension:
+
+```json
+{
+  "task": {
+    "type": "continue",
+    "value": {
+        "card": {
+            "contentType": "application/vnd.microsoft.card.adaptive",
+            "content": // Card Body
+        }
+    }
+  }
+}
+```
+
+Pure Html: N/A
+
+
+
+
+
+
 
 
 
