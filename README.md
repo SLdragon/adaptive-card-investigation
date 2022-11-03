@@ -661,3 +661,6 @@ Pure Html: N/A
 
 ## Discussion
 - Which scenario or platform do we want for API integration? From our previous discussion, seems we prefer Bot Chat.
+
+## Following ups
+- API integration investigation: swagger/open api/apim/graph api
