@@ -655,6 +655,9 @@ Message Extension:
 Pure Html: N/A
 
 
+## Ideas
+- Allow user to select an adaptive cards, and then generate a sample Teams Project which has the code snippet to support Chat Bot/Teams Tab/Message Extension.
+
 
 
 
