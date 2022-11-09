@@ -5,7 +5,7 @@ Adaptive Cards are an open card exchange format using JSON enabling developers t
 
 An example: 
 
-![Sample Adaptive Card](./hello-adaptivecards.png)
+![Sample Adaptive Card](./adaptive-card-images/hello-adaptivecards.png)
 
 ```json
 {
@@ -54,18 +54,18 @@ Before the Universal Actions for Adaptive Cards, different hosts provided differ
 - Outlook used Action.Http to communicate with the backend service explicitly specified in the Adaptive Card payload.
 The following image shows the current inconsistent action model:
 
-![Current Teams Outlook Action Model](./current-teams-outlook-action-model.png)
+![Current Teams Outlook Action Model](./adaptive-card-images/current-teams-outlook-action-model.png)
 
 With the Universal Actions for Adaptive Cards, you can use Action.Execute for action handling across different platforms. Action.Execute works across hubs including Teams and Outlook:
 
-![Universal Action Model](./universal-action-model.png)
+![Universal Action Model](./adaptive-card-images/universal-action-model.png)
 
 
 ## Adaptive Card for Teams Bot
 Workflow:
 - Bot send adaptive Card using message attachments as below:
 
-  ![Bot Hello Card](./bot-hello.png)
+  ![Bot Hello Card](./adaptive-card-images/bot-hello.png)
 
   ```json
   {
@@ -147,7 +147,7 @@ Workflow:
   }
   ```
 
-  ![Bot Response Message](./bot-response-message.png)
+  ![Bot Response Message](./adaptive-card-images/bot-response-message.png)
 
 
 - If user click ActionWithExecute button, it will send activity with name `adaptiveCard/action`
@@ -172,7 +172,7 @@ Workflow:
     }
   }
   ```
-  ![My Action Works](./my-action-works.png)
+  ![My Action Works](./adaptive-card-images/my-action-works.png)
 
 
   Response body: Response adaptive card
@@ -199,7 +199,7 @@ Workflow:
     }
   }
   ```
-  ![Invoke Works](./invoke-works.png)
+  ![Invoke Works](./adaptive-card-images/invoke-works.png)
 
 
 ## Adaptive Card for Teams Tab
@@ -213,7 +213,7 @@ Workflow:
   ```
 
   A sample Tab response will be as below:
-  ![Adaptive Card Tab](./adaptive-card-tab.png)
+  ![Adaptive Card Tab](./adaptive-card-images/adaptive-card-tab.png)
   ```json
   {
    "tab":{
@@ -294,7 +294,7 @@ Workflow:
   ```
 
   A sample Tab response will be as below:
-  ![Invoke with Submit](./invoke-with-submit.png)
+  ![Invoke with Submit](./adaptive-card-images/invoke-with-submit.png)
   ```json
   {
    "tab":{
@@ -331,7 +331,7 @@ Workflow:
 
 - Currently, Teams Tab not supported `Action.Execute`, it will show error as below:
 
-  ![Not Support Card Action](./not-support-card-action.png)
+  ![Not Support Card Action](./adaptive-card-images/not-support-card-action.png)
 
 ## Adaptive Card in Message extension
 Workflow:
@@ -414,7 +414,7 @@ Workflow:
     }
   }
   ```
-  ![Message Extension](./message-extension.png)
+  ![Message Extension](./adaptive-card-images/message-extension.png)
 
 - When user click `ActionWithSubmit` button, it will send `composeExtension/submitAction` to the Bot backend with the request body as below:
 
@@ -469,7 +469,7 @@ Workflow:
     }
   }
   ```
-  ![Message Extension Response](./message-extension-response.png)
+  ![Message Extension Response](./adaptive-card-images/message-extension-response.png)
 
 
 
@@ -531,7 +531,7 @@ Workflow:
   document.body.appendChild(adaptiveCard.render());
   ```
 
-  ![Pure Html Card](./pure-html-card.png)
+  ![Pure Html Card](./adaptive-card-images/pure-html-card.png)
 
 
 ## Compare adaptive card in different platform
@@ -548,7 +548,7 @@ Trigger pattern and supported action:
 
 Adaptive card response body in different platform:
 
-![](./compare-tab-for-adaptive-card.png)
+![](./adaptive-card-images/compare-tab-for-adaptive-card.png)
 
 Body of adaptive card when user query first one:
 
