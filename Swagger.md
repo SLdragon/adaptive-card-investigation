@@ -729,7 +729,7 @@ And when user click `POST` button, it will response with a message:
 ### Some limitations
 - Adaptive Card doesn't support File upload, and some APIs with binary file upload may not support: https://github.com/microsoft/AdaptiveCards/issues/5844
 
-- Adaptive Card action has its own payload as below and cannot call API directly throw action buttons, so we need to call APIs from Bot backend and then sent back to Teams:
+- Adaptive Card action has its own payload as below and cannot call API directly through action buttons, so we need to call APIs from Bot backend and then sent back to Teams:
   ```json
   {
     "text":"text to bots",
