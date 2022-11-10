@@ -363,7 +363,7 @@ responses:
               description: The user name.
 ```
 
-Response Anyof or oneOf schema:
+Response oneOf schema:
 ```yaml
 responses:
   '200':
@@ -616,60 +616,53 @@ The adaptive cards generate is as below:
 {
     "type": "AdaptiveCard",
     "body": [
-      {
-          "type": "TextBlock",
-          "text": "GET: /users/{userId} Returns a user by ID.",
-          "wrap": true,
-          "color": "Dark",
-          "weight": "Bolder"
-      },
-      {
-          "type": "TextBlock",
-          "text": "Servers",
-          "wrap": true
-      },
-      {
-          "type": "Input.ChoiceSet",
-          "choices": [
-              {
-                  "title": "http://api.example.com/v1",
-                  "value": "http://api.example.com/v1"
-              },
-              {
-                  "title": "http://staging-api.example.com",
-                  "value": "http://staging-api.example.com"
-              }
-          ],
-          "placeholder": "Select Server",
-          "value": "http://api.example.com/v1"
-      },
-      {
-         "type":"TextBlock",
-         "text":"POST: /users/{userId} \nCreates a new user.",
-         "wrap":true,
-         "weight":"Bolder"
-      },
-      {
-         "type":"Input.Text",
-         "placeholder":"id",
-         "label":"id",
-         "id":"id"
-      },
-      {
-         "type":"Input.Text",
-         "placeholder":"name",
-         "label":"name",
-         "id":"name"
-      },
-      {
-         "type":"ActionSet",
-         "actions":[
-            {
-               "type":"Action.Execute",
-               "title":"POST"
-            }
-         ]
-      }
+        {
+            "type": "TextBlock",
+            "text": "POST: /users Creates a new user.",
+            "wrap": true,
+            "weight": "Bolder"
+        },
+        {
+            "type": "TextBlock",
+            "text": "Servers",
+            "wrap": true
+        },
+        {
+            "type": "Input.ChoiceSet",
+            "choices": [
+                {
+                    "title": "http://api.example.com/v1",
+                    "value": "http://api.example.com/v1"
+                },
+                {
+                    "title": "http://staging-api.example.com",
+                    "value": "http://staging-api.example.com"
+                }
+            ],
+            "placeholder": "Select Server",
+            "value": "http://api.example.com/v1"
+        },
+        {
+            "type": "Input.Text",
+            "placeholder": "id",
+            "label": "id",
+            "id": "id"
+        },
+        {
+            "type": "Input.Text",
+            "placeholder": "name",
+            "label": "name",
+            "id": "name"
+        },
+        {
+            "type": "ActionSet",
+            "actions": [
+                {
+                    "type": "Action.Execute",
+                    "title": "POST"
+                }
+            ]
+        }
     ],
     "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
     "version": "1.5"
