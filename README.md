@@ -658,9 +658,7 @@ Pure Html: N/A
 ## Ideas
 - From the investigation, each platform has its own response body for adaptive card, so some user asked for adaptive card centric experience, user only need to write pure adaptive card, and teams toolkit will help user generate necessary material, for example: allow user to select an adaptive cards, and then generate a sample Teams Project which has the code snippet to support Chat Bot/Teams Tab/Message Extension.
 
-
-## Discussion
-- Which scenario or platform do we want for API integration? From our previous discussion, seems we prefer Bot Chat.
-
 ## Following ups
 - API integration investigation: swagger/open api/apim/graph api
+
+  [Swagger/OpenAPI Investigation](./Swagger.md)
