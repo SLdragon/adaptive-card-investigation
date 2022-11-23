@@ -63,6 +63,67 @@ One of the features of link unfurling is the adoption of schema.org – if a URL
 </div>
 ```
 
+## Ideas for link unfurling as discussed
+- User provider a swagger yml file with Rest API definition
+  
+  Example yaml file:
+
+  ```yaml
+  openapi: 3.0.0
+  info: # Contains API information
+    title: Sample API
+    description: Optional multiline or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.
+    version: 0.1.9
+  servers: # Specifies the API server and base URL
+    - url: http://api.example.com/v1
+      description: Optional server description, e.g. Main (production) server
+  paths: # defines individual endpoints (paths), and the HTTP methods (operations) supported by these endpoints.
+    /users/{userId}:
+      get:
+        summary: Returns a user by ID.
+        parameters:
+          - in: path
+            name: userId
+            required: true
+            schema:
+              type: integer
+              format: int64
+              minimum: 1
+        responses:
+          '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/User'
+
+  components:
+    schemas:
+      User:
+        type: object
+        properties:
+          id:
+            type: integer
+            example: 4
+          name:
+            type: string
+            example: Arthur Dent
+        # Both properties are required
+        required:  
+          - id
+          - name
+  ```
+
+- Teams Toolkit will analyze the GET operation in APIs to generate adaptive card based on GET response
+  
+
+- Generate a sample project which contains bot backend service which will show link unfurling when user input the URL 
+
+  When user input http://api.example.com/v1/users/xxxx, it will show below link unfurling adaptive card:
+
+  ![adaptive-card-user](./swagger-images/adaptive-card-user.png) 
+
+
 ## Some limitations
 - Currently, link unfurling is not supported on Mobile clients.
 - Today link unfurling must be done in the context of a message extension app which requires a bot.
