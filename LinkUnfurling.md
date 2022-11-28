@@ -50,6 +50,19 @@ One of the features of link unfurling is the adoption of schema.org – if a URL
 
 ![app-less-link-unfurling-example](./link-unfurling-images/app-less-link-unfurling-example.png)
 
+
+## Zero install for link unfurling
+Zero install link unfurling helps you unfurl previews for your shared links even before a user discovered or installed your app in Teams. You can anonymously unfurl cards with a new invoke request or create a pre-authenticated Adaptive Card preview for users before they install or authenticate your app.
+
+Work flow:
+
+- Set the property supportsAnonymizedPayloads to true in the manifest schema.
+- Set your app to handle the new invoke request composeExtension/anonymousQueryLink.
+
+
+Limitation:
+- The zero-install link unfurling experience is governed by all Teams admin security policies, which means that if an app is blocked at the tenant level, zero-install link unfurling won’t preview it.
+
 ### Example of HTML with metadata:
 
 ```html
